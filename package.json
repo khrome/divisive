@@ -1,0 +1,18 @@
+{
+  "name": "divisive",
+  "version": "0.0.1",
+  "main": "divisive.js",
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^9.2.0"
+  },
+  "bin": {
+    "dsv": "bin/dsv"
+  },
+  "dependencies": {
+    "app-term-kit": "^0.4.2",
+    "dsv-stream": "0.0.6",
+    "fake-csv": "0.0.1",
+    "sift": "^15.1.3"
+  }
+}
