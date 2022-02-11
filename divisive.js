@@ -1,6 +1,7 @@
 const DATA = require('dsv-stream');
 const sift = require('sift').default;
 const fs = require('fs');
+const ks = require('kitchen-sync');
 
 let supportedTypes = [
     'DSV',
@@ -11,19 +12,10 @@ let supportedTypes = [
 
 module.exports = {
     parseData : (file, opts, cb)=>{
-        const options = opts || {};
+        let callback = typeof opts === 'function'?opts:cb;
+        let options = typeof opts === 'function'?{}:opts;
+        callback = ks(callback);
         const type = file.split('.').pop().toUpperCase();
-        let resolve = null;
-        let reject = null;
-        const rtrn = (cb || typeof opts === 'function')?null:new Promise((rslv, rjct)=>{
-            resolve = rslv;
-            reject = rjct;
-        });
-        const callback = cb || (typeof opts === 'function'?opts:(err, result)=>{
-            if(err && reject) return reject(err);
-            if(result && resolve) return resolve(result);
-            reject(new Error('Empty Result'))
-        });
         if(supportedTypes.indexOf(type) === -1){
             callback(new Error('Unsupported file type: '+type));
         }else{
@@ -54,6 +46,6 @@ module.exports = {
             });
             stream.pipe(decomposer.writer());
         }
-        return rtrn;
+        return callback.return;
     }
 }
